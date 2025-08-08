@@ -1,0 +1,51 @@
+name: Crypto News Bot
+
+on:
+  schedule:
+    # 4시간마다 실행 (UTC 기준: 00:00, 04:00, 08:00, 12:00, 16:00, 20:00)
+    - cron: '0 */4 * * *'
+  workflow_dispatch:  # 수동 실행 버튼 활성화
+
+jobs:
+  run-crypto-news-bot:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Create data directory
+      run: mkdir -p data
+      
+    - name: Download previous database
+      continue-on-error: true
+      run: |
+        if [ -f data/crypto_news.db ]; then
+          echo "Database exists"
+        else
+          echo "Creating new database"
+        fi
+        
+    - name: Run crypto news bot
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+      run: python crypto_news_bot.py
+      
+    - name: Upload database artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: crypto-news-db
+        path: data/crypto_news.db
+        retention-days: 7
