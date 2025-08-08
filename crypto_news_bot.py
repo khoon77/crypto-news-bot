@@ -23,8 +23,8 @@ logging.basicConfig(
 class CryptoNewsTelegramBot:
     def __init__(self):
         # 환경변수에서 설정값 읽기
-        self.telegram_bot_token = os.getenv('8046651654:AAHCU-LlMq5wn5522SXq1aZm1GDobcjwkWc')
-        self.telegram_chat_id = os.getenv('1023578818')
+        self.telegram_bot_token = '8046651654:AAHCU-L1Mq5wn5522SXq1aQzm1GD0bcyjwKc'
+        self.telegram_chat_id = '10235788018'
         self.newsapi_key = os.getenv('NEWSAPI_KEY', '')
         
         if not self.telegram_bot_token or not self.telegram_chat_id:
@@ -280,4 +280,5 @@ if __name__ == "__main__":
         bot.run_once()
     except Exception as e:
         logging.error(f"봇 실행 중 오류 발생: {e}")
+
         exit(1)
