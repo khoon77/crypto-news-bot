@@ -44,7 +44,7 @@ jobs:
       run: python crypto_news_bot.py
       
     - name: Upload database artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: crypto-news-db
         path: data/crypto_news.db
